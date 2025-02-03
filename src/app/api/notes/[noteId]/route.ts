@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  context: { params: { noteId: string } }
+  context: { params: Promise<{ noteId: string }> }
 ) {
   try {
-    const noteId = await context.params.noteId;
+    const noteId = await (await context.params).noteId;
 
     const note = await prisma.secureText.findUnique({
       where: { urlPath: noteId },
@@ -74,10 +74,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  context: { params: { noteId: string } }
+  context: { params: Promise<{ noteId: string }> }
 ) {
   try {
-    const noteId = await context.params.noteId;
+    const noteId = await (await context.params).noteId;
     const { text } = await request.json();
     const password = request.headers.get('X-Note-Password');
     
