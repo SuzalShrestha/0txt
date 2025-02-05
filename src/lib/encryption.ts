@@ -22,7 +22,7 @@ export function encrypt(text: string, password: string): EncryptionResult {
   const salt = crypto.randomBytes(SALT_BYTES);
   const iv = crypto.randomBytes(IV_BYTES);
   const key = generateKey(password, salt);
-  
+
   const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');
   encrypted += cipher.final('hex');
@@ -32,7 +32,7 @@ export function encrypt(text: string, password: string): EncryptionResult {
     encryptedText: encrypted,
     salt: salt.toString('hex'),
     iv: iv.toString('hex'),
-    authTag: authTag.toString('hex')
+    authTag: authTag.toString('hex'),
   };
 }
 
@@ -41,20 +41,16 @@ export function decrypt(
   password: string,
   salt: string,
   iv: string,
-  authTag: string
+  authTag: string,
 ): string {
   try {
     const key = generateKey(password, Buffer.from(salt, 'hex'));
-    const decipher = crypto.createDecipheriv(
-      ALGORITHM,
-      key,
-      Buffer.from(iv, 'hex')
-    );
+    const decipher = crypto.createDecipheriv(ALGORITHM, key, Buffer.from(iv, 'hex'));
     decipher.setAuthTag(Buffer.from(authTag, 'hex'));
 
     let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
-    
+
     return decrypted;
   } catch {
     throw new Error('Decryption failed. Invalid password or corrupted data.');
@@ -66,10 +62,7 @@ export function generateSecurePassword(): string {
   // Generate random bytes and convert to base64
   const base64 = crypto.randomBytes(32).toString('base64');
   // Make it URL safe by replacing non-URL safe characters
-  return base64
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=/g, '');
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
 // Hash a password for verification
@@ -84,4 +77,4 @@ export function verifyPassword(password: string, hashedPassword: string): boolea
   const [salt, hash] = hashedPassword.split(':');
   const verifyHash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
   return hash === verifyHash;
-} 
+}

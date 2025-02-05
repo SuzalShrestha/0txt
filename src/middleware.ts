@@ -33,18 +33,18 @@ export async function middleware(request: NextRequest) {
 
       if (isLimited) {
         return new NextResponse(
-          JSON.stringify({ 
+          JSON.stringify({
             error: 'Too many requests',
-            retryAfter: Math.ceil(RATE_LIMIT_WINDOW / 1000)
+            retryAfter: Math.ceil(RATE_LIMIT_WINDOW / 1000),
           }),
           {
             status: 429,
             headers: {
               'Content-Type': 'application/json',
               'Retry-After': Math.ceil(RATE_LIMIT_WINDOW / 1000).toString(),
-              ...Object.fromEntries(response.headers)
+              ...Object.fromEntries(response.headers),
             },
-          }
+          },
         );
       }
     } catch {
@@ -62,13 +62,10 @@ function addHeaders(response: NextResponse, request: NextRequest): void {
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';",
   );
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set(
-    'Strict-Transport-Security',
-    'max-age=31536000; includeSubDomains'
-  );
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 
   // Caching headers based on route type
   if (request.nextUrl.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg)$/)) {
@@ -93,4 +90,4 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
-}; 
+};

@@ -30,7 +30,7 @@ export async function isRateLimited(ip: string, limit: number, window: number): 
 
     // Get current count before adding new request
     const currentCount = await redisClient.zcard(key);
-    
+
     // If already over limit, extend expiry and return true
     if (currentCount >= limit) {
       await redisClient.expire(key, Math.ceil(window / 1000));
@@ -61,7 +61,11 @@ export async function getCachedData<T>(key: string): Promise<T | null> {
   }
 }
 
-export async function setCachedData<T>(key: string, data: T, expirySeconds: number = 3600): Promise<void> {
+export async function setCachedData<T>(
+  key: string,
+  data: T,
+  expirySeconds: number = 3600,
+): Promise<void> {
   if (!key || typeof key !== 'string') return;
 
   try {
@@ -84,4 +88,4 @@ export async function invalidateCache(key: string): Promise<void> {
   }
 }
 
-export default redisClient; 
+export default redisClient;
