@@ -1,0 +1,31 @@
+name: Deploy to Production
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/0txt
+            # git reset --hard
+            # git clean -fd
+            git checkout production
+            git pull origin production
+            npm install
+            npm run lint
+            npm run build
+            pm2 stop 0txt-prod || true
+            pm2 start npm --name "0txt-prod" -- run start
+            pm2 save
