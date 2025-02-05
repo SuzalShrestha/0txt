@@ -26,7 +26,7 @@ export default function NotePage() {
     try {
       const response = await fetch(`/api/notes/${params.noteId}`);
       const data = await response.json();
-      
+
       if (response.status === 401) {
         // Note exists but needs password
         setIsNewNote(false);
@@ -137,7 +137,7 @@ export default function NotePage() {
 
   if (isLoading && !isPasswordPromptVisible && !isSetPasswordVisible) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-gray-600 dark:text-gray-400">Loading...</div>
       </div>
     );
@@ -145,14 +145,15 @@ export default function NotePage() {
 
   if (isPasswordPromptVisible) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            Enter Password
-          </h2>
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-xl dark:bg-gray-800">
+          <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Enter Password</h2>
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 This note is password protected. Please enter the password to continue:
               </label>
               <input
@@ -160,19 +161,15 @@ export default function NotePage() {
                 id="password"
                 value={inputPassword}
                 onChange={(e) => setInputPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-400"
                 placeholder="Enter password"
                 required
               />
             </div>
-            {error && (
-              <div className="text-red-600 dark:text-red-400 text-sm">
-                {error}
-              </div>
-            )}
+            {error && <div className="text-sm text-red-600 dark:text-red-400">{error}</div>}
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+              className="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
             >
               Access Note
             </button>
@@ -184,14 +181,15 @@ export default function NotePage() {
 
   if (isSetPasswordVisible) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            Set Password
-          </h2>
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-xl dark:bg-gray-800">
+          <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Set Password</h2>
           <form onSubmit={handleSetPassword} className="space-y-4">
             <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label
+                htmlFor="newPassword"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Create a password to protect your note:
               </label>
               <input
@@ -199,7 +197,7 @@ export default function NotePage() {
                 id="newPassword"
                 value={inputPassword}
                 onChange={(e) => setInputPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-white mb-4"
+                className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-400"
                 placeholder="Enter password"
                 required
                 minLength={8}
@@ -209,20 +207,16 @@ export default function NotePage() {
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-400"
                 placeholder="Confirm password"
                 required
                 minLength={8}
               />
             </div>
-            {error && (
-              <div className="text-red-600 dark:text-red-400 text-sm">
-                {error}
-              </div>
-            )}
+            {error && <div className="text-sm text-red-600 dark:text-red-400">{error}</div>}
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+              className="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
             >
               Set Password and Save
             </button>
@@ -233,22 +227,20 @@ export default function NotePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
-          <div className="flex flex-col gap-4 mb-6">
-            <div className="flex justify-between items-center">
+    <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-900">
+      <div className="mx-auto max-w-4xl">
+        <div className="rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800">
+          <div className="mb-6 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {isNewNote ? 'This URL is available!' : params.noteId}
               </h1>
               <div className="flex items-center gap-4">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {saveStatus}
-                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{saveStatus}</span>
                 <button
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-50 transition-colors duration-200"
+                  className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors duration-200 hover:bg-blue-700 disabled:opacity-50"
                 >
                   {isSaving ? 'Saving...' : 'Save'}
                 </button>
@@ -256,33 +248,45 @@ export default function NotePage() {
             </div>
 
             {isNewNote && (
-              <div className="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg">
+              <div className="rounded-lg bg-yellow-50 p-4 dark:bg-yellow-900">
                 <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <div>
-                    <p className="font-medium">This URL is available! Start writing your note and click Save to set a password.</p>
+                    <p className="font-medium">
+                      This URL is available! Start writing your note and click Save to set a
+                      password.
+                    </p>
                   </div>
                 </div>
               </div>
             )}
 
             {error && !isPasswordPromptVisible && !isSetPasswordVisible && (
-              <div className="bg-red-50 dark:bg-red-900 p-4 rounded-lg">
+              <div className="rounded-lg bg-red-50 p-4 dark:bg-red-900">
                 <p className="text-red-800 dark:text-red-200">{error}</p>
               </div>
             )}
           </div>
-          
+
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="w-full h-[70vh] p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-white resize-none"
+            className="h-[70vh] w-full resize-none rounded-lg border border-gray-300 p-4 focus:border-transparent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-400"
             placeholder="Start typing your secure note here..."
           />
         </div>
       </div>
     </div>
   );
-} 
+}
