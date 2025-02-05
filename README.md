@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 0txt
 
-## Getting Started
+**0txt** is a secure, privacy-focused, open-source text storage platform inspired by [ProtectedText](https://www.protectedtext.com/). It allows users to create, save, and manage encrypted notes without any central authority having access to their data.
+<img width="1108" alt="Screenshot 2025-02-05 at 9 38 34 PM" src="https://github.com/user-attachments/assets/4bc05e7f-49fb-420b-92ae-3e2cdb2c9603" />
 
-First, run the development server:
+---
 
+## 🚀 Features
+
+- **End-to-End Encryption:** All notes are encrypted client-side, ensuring only you can read them.
+- **Password Protection:** Password protection for enhanced security.
+- **No Account Required:** Create and manage notes without registration.
+- **Lightweight & Fast:** Optimized for performance with a minimalistic UI.
+- **Mobile-Friendly:** Responsive design for seamless usage on mobile devices.
+
+---
+
+## ⚡ Getting Started
+
+### Clone the Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone https://github.com/suzalshrestha/0txt.git
+cd 0txt
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install Dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Run Locally
+```bash
+npm run dev
+# The app will be running at http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Build for Production
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 CI/CD Pipeline
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### GitHub Actions Workflow
+- **Trigger:** On every push to the `production` branch.
+- **Tasks:** SSH into the production server, pull the latest changes, run lint checks, build the project, and restart the server using PM2.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+> **Note:** Never commit `.env` to version control.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🧪 Linting & Code Quality
+- **Linting:** Uses [ESLint](https://eslint.org/)
+- **Run Linter:**
+```bash
+npm run lint
+```
+
+To auto-fix issues:
+```bash
+npm run lint -- --fix
+```
+
+---
+
+## 🛡️ Security Considerations
+- All encryption happens **client-side**.
+- No sensitive data is stored on the server.
+- Strong password recommendations for note protection.
+
+> **Disclaimer:** Always audit open-source projects before using them in production for sensitive data.
+
+---
+
+## 🤝 Contributing
+
+1. **Fork the repository**
+2. **Create your feature branch:** `git checkout -b feature/YourFeature`
+3. **Commit your changes:** `git commit -m 'Add new feature'`
+4. **Push to the branch:** `git push origin feature/YourFeature`
+5. **Open a Pull Request**
+
+---
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🙏 Acknowledgments
+
+- Inspired by [ProtectedText](https://www.protectedtext.com/)
+- Special thanks to the open-source community ❤️
+
+---
+
+**Built with ❤️ by [sujal](https://github.com/suzalshrestha)**
+
