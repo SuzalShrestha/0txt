@@ -24,26 +24,28 @@ export default function NotePage() {
 
   const checkNoteExists = async () => {
     try {
+      setIsLoading(true);
+      setError('');
+      
       const response = await fetch(`/api/notes/${params.noteId}`);
       const data = await response.json();
-
+      
       if (response.status === 401) {
-        // Note exists but needs password
+        // Note exists, needs password
         setIsNewNote(false);
         setIsPasswordPromptVisible(true);
       } else if (response.ok && data.exists === false) {
-        // New note
+        // URL is available
         setIsNewNote(true);
         setText('');
-        setIsLoading(false);
-      } else if (response.ok && data.exists === true) {
-        // Note exists but wrong password
-        setIsNewNote(false);
-        setIsPasswordPromptVisible(true);
+      } else if (!response.ok) {
+        throw new Error(data.message || 'Failed to check if note exists');
       }
     } catch (error) {
       console.error('Failed to check note:', error);
-      setError('Failed to check if note exists');
+      setError(error instanceof Error ? error.message : 'Failed to check if note exists');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -98,8 +100,15 @@ export default function NotePage() {
   };
 
   const handleSave = async () => {
-    if (isNewNote && !password) {
+    // If it's a new note and text is entered but no password set
+    if (isNewNote && text.trim() && !password) {
       setIsSetPasswordVisible(true);
+      return;
+    }
+
+    // Don't save if there's no text
+    if (!text.trim()) {
+      setError('Please enter some text before saving');
       return;
     }
 
@@ -125,7 +134,8 @@ export default function NotePage() {
         setIsNewNote(false);
         setTimeout(() => setSaveStatus(''), 2000);
       } else {
-        setSaveStatus('Failed to save');
+        const data = await response.json();
+        setSaveStatus(data.error || 'Failed to save');
       }
     } catch (error) {
       console.error('Failed to save note:', error);
@@ -137,24 +147,31 @@ export default function NotePage() {
 
   if (isLoading && !isPasswordPromptVisible && !isSetPasswordVisible) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-gray-600 dark:text-gray-400">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <div className="text-gray-600 dark:text-gray-400 mb-4">Loading...</div>
+          {error && (
+            <div className="text-sm text-red-600 dark:text-red-400 max-w-md">
+              {error}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
 
   if (isPasswordPromptVisible) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-xl dark:bg-gray-800">
-          <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Enter Password</h2>
+          <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Access Your Note</h2>
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
               <label
                 htmlFor="password"
                 className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
-                This note is password protected. Please enter the password to continue:
+                This note is password protected. Please enter your password to continue:
               </label>
               <input
                 type="password"
@@ -181,7 +198,7 @@ export default function NotePage() {
 
   if (isSetPasswordVisible) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-xl dark:bg-gray-800">
           <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Set Password</h2>
           <form onSubmit={handleSetPassword} className="space-y-4">
@@ -233,7 +250,7 @@ export default function NotePage() {
           <div className="mb-6 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {isNewNote ? 'This URL is available!' : params.noteId}
+                {isNewNote ? 'Create Your Note' : 'Your Note'}
               </h1>
               <div className="flex items-center gap-4">
                 <span className="text-sm text-gray-500 dark:text-gray-400">{saveStatus}</span>
@@ -264,8 +281,7 @@ export default function NotePage() {
                   </svg>
                   <div>
                     <p className="font-medium">
-                      This URL is available! Start writing your note and click Save to set a
-                      password.
+                      This URL is available! Write your note and click Save to set a password.
                     </p>
                   </div>
                 </div>
